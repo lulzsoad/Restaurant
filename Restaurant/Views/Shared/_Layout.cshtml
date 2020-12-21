@@ -6,8 +6,9 @@
     <title>@ViewData["Title"] - Restaurant</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/0fdcba151e.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="search-background">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
@@ -24,7 +25,7 @@
                                 Zarządzanie zawartością
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
-                                <a class="dropdown-item">Kategoria</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Kategoria</a>
                                 <a class="dropdown-item">Podkategoria</a>
                                 <a class="dropdown-item">Pozycje w menu</a>
                                 <a class="dropdown-item">Kupony</a>

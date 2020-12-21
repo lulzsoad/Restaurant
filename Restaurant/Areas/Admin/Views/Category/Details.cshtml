@@ -1,0 +1,34 @@
+﻿@model Restaurant.Models.Category
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<div class="border backgrounWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Szczegóły Kategorii</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <form asp-action="Edit">
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Name" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-5 offset-2">
+                <partial name="_DetailsAndBackToListButton" model="Model.Id" />
+            </div>
+        </div>
+    </form>
+</div>
+
