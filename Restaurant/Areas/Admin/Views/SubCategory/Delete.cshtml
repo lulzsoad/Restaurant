@@ -1,0 +1,47 @@
+﻿@model Restaurant.Models.ViewModels.SubCategoryAndCategoryViewModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<div class="border backgrounWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Szczegóły Podkategoriii</h2>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-8">
+            <form method="post" asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <div class="col-3">
+                        <label asp-for="Category.Name" class="col-form-label"></label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" disabled asp-for="Category.Name" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-3">
+                        <label asp-for="SubCategory.Name" class="col-form-label"></label>
+                    </div>
+                    <div class="col-6">
+                        <input disabled asp-for="SubCategory.Name" class="form-control" />
+                    </div>
+                    <span asp-validation-for="SubCategory.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6 offset-3">
+                        <partial name="_DeleteAndBackToListButton" model="Model.SubCategory.Id" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
