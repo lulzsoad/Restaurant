@@ -27,7 +27,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
                                 <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Kategoria</a>
                                 <a class="dropdown-item" asp-area="Admin" asp-controller="SubCategory" asp-action="Index">Podkategoria</a>
-                                <a class="dropdown-item">Pozycje w menu</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="MenuItem" asp-action="Index">Pozycje w menu</a>
                                 <a class="dropdown-item">Kupony</a>
                                 <a class="dropdown-item">Użytkownicy</a>
                             </div>
@@ -51,9 +51,10 @@
 
     <footer class="border-top pl-3 footer text-white-50" style="background-color: #343a40;">
         <div class="container">
-            &copy; 2020 - Restaurant 
+            &copy; 2020 - Restaurant
         </div>
     </footer>
+    <script src="https://cdn.tiny.cloud/1/5l5pzbpvkbfr27jtxn17f7303s274v5bd7pogofw4dtnygbb/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
