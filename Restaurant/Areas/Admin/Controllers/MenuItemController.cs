@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Data;
 using Restaurant.Models.ViewModels;
+using Restaurant.Utility;
 
 namespace Restaurant.Areas.Admin.Controllers
 {
@@ -16,6 +18,7 @@ namespace Restaurant.Areas.Admin.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
+        // Item loaded by default to functions
         [BindProperty]
         public MenuItemViewModel MenuItemVM { get; set; }
 
@@ -23,6 +26,7 @@ namespace Restaurant.Areas.Admin.Controllers
         {
             _db = db;
             _hostingEnvironment = hostingEnvironment;
+
             MenuItemVM = new MenuItemViewModel()
             {
                 Category = _db.Category,
@@ -41,5 +45,59 @@ namespace Restaurant.Areas.Admin.Controllers
         {
             return View(MenuItemVM);
         }
+
+        // (POST - CREATE)
+        [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePOST()
+        {
+            MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+
+            if(ModelState.IsValid)
+            {
+                _db.MenuItem.Add(MenuItemVM.MenuItem);
+                await _db.SaveChangesAsync();
+
+                // IMAGE SAVING SECTION
+
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
+
+                var menuItemFromDb = await _db.MenuItem.FindAsync(MenuItemVM.MenuItem.Id);
+
+                if(files.Count > 0)
+                {
+                    // FILE HAS BEEN UPLOADED
+
+                    var uploads = Path.Combine(webRootPath, "images");
+                    var extension = Path.GetExtension(files[0].FileName);
+
+                    // SETS FILE'S NAME BY ID OF MENUITEM WITH ACTUAL EXTENSION
+                    using (var fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+
+                    menuItemFromDb.Image = $@"\images\{MenuItemVM.MenuItem.Id + extension}";
+                }
+                else
+                {
+                    // NO FILE WAS UPLOADED, SO USE DEFAULT
+
+                    var uploads = Path.Combine(webRootPath, $@"images\{StaticDetail.NoImage}");
+                    System.IO.File.Copy(uploads, $@"{webRootPath}\images\{MenuItemVM.MenuItem.Id}.jpg");
+                    menuItemFromDb.Image = $@"\images\{MenuItemVM.MenuItem.Id}.jpg";
+                }
+
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(MenuItemVM);
+            }
+        }
+
     }
 }
