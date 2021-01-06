@@ -1,0 +1,132 @@
+﻿@model Restaurant.Models.ViewModels.MenuItemViewModel
+@using Restaurant.Extensions
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<div class="border backgrounWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Usuń Pozycję  Menu</h2>
+        </div>
+    </div>
+
+    <br />
+
+    <div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="MenuItem.Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input disabled asp-for="MenuItem.Name" class="form-control" />
+                    </div>
+                    <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        @Html.TextAreaFor(m => m.MenuItem.Description)
+                    </div>
+                    <span asp-validation-for="MenuItem.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input disabled asp-for="MenuItem.Price" class="form-control" />
+                    </div>
+                    <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select disabled class="form-control" id="CategoryId" asp-for="@Model.MenuItem.CategoryId" asp-items="Model.Category.ToSelectListItem(Model.MenuItem.CategoryId)"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.SubCategoryId" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select disabled class="form-control" id="SubCategoryId" name="SubCategoryId" asp-for="@Model.MenuItem.SubCategoryId" asp-items="@(new SelectList(string.Empty, "Id", "Name"))"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="MenuItem.Additions" class="col-form-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select disabled asp-for="MenuItem.Additions" asp-items="Html.GetEnumSelectList<MenuItem.EAdditions>()" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <img src="@Model.MenuItem.Image" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9" />
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="col-8 offset-4">
+                <partial name="_DeleteAndBackToListButton" model="Model.MenuItem.Id" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: "lists",
+            menubar: 'file edit format',
+            readonly: 1
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getSubCategory();
+            $('#CategoryId').change(function () {
+                getSubCategory();
+            });
+        });
+
+        function getSubCategory() {
+            var url = '@Url.Content("~/")' + "Admin/SubCategory/GetSubCategory";
+            var ddlSource = '#CategoryId';
+            $.getJSON(url, { id: $(ddlSource).val() }, function (data) {
+                var items = '';
+                $('#SubCategoryId').empty();
+                $.each(data, function (i, subCategory) {
+                    items += "<option value='" + subCategory.value + "'>" + subCategory.text + "</option>";
+                });
+
+                $('#SubCategoryId').html(items);
+            });
+
+
+        }
+    </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
