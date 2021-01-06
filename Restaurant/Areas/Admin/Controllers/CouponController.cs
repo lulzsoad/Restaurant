@@ -22,5 +22,11 @@ namespace Restaurant.Areas.Admin.Controllers
         {
             return View(await _db.Coupon.ToListAsync());
         }
+
+        // (GET - CREATE)
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
