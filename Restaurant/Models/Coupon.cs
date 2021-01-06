@@ -25,6 +25,6 @@ namespace Restaurant.Models
 
         public byte[] Picture { get; set; }
 
-        public bool IsActive;
+        public bool IsActive { get; set; }
     }
 }

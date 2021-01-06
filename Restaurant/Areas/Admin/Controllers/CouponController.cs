@@ -63,5 +63,24 @@ namespace Restaurant.Areas.Admin.Controllers
 
             return View(Coupon);
         }
+
+        // (GET - EDIT)
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            Coupon = await _db.Coupon.Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            if (Coupon == null)
+            {
+                return NotFound();
+            }
+
+            return View(Coupon);
+        }
     }
 }
