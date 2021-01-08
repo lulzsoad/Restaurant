@@ -106,10 +106,9 @@ namespace Restaurant.Areas.Admin.Controllers
                             p1 = ms1.ToArray(); // Transforms picture into string
                         }
                     }
-                    Coupon.Picture = p1;
+                    couponFromDb.Picture = p1;
                 }
 
-                couponFromDb.Picture = Coupon.Picture;
                 couponFromDb.Name = Coupon.Name;
                 couponFromDb.IsActive = Coupon.IsActive;
                 couponFromDb.MinimumAmount = Coupon.MinimumAmount;
@@ -118,6 +117,23 @@ namespace Restaurant.Areas.Admin.Controllers
                 
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+
+            return View(Coupon);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Coupon = await _db.Coupon.Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            if (Coupon == null)
+            {
+                return NotFound();
             }
 
             return View(Coupon);
