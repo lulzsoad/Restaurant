@@ -122,6 +122,7 @@ namespace Restaurant.Areas.Admin.Controllers
             return View(Coupon);
         }
 
+        // (GET - DETAILS)
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -137,6 +138,48 @@ namespace Restaurant.Areas.Admin.Controllers
             }
 
             return View(Coupon);
+        }
+
+        // (GET - DELETE)
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Coupon = await _db.Coupon.Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            if (Coupon == null)
+            {
+                return NotFound();
+            }
+
+            return View(Coupon);
+        }
+
+        // (POST - DELETE)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePOST(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var coupon = await _db.Coupon.FindAsync(Coupon.Id);
+
+            if(coupon == null)
+            {
+                return NotFound();
+            }
+
+            _db.Coupon.Remove(coupon);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
