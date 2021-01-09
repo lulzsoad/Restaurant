@@ -41,7 +41,7 @@
                 <label asp-for="MenuItem.Price" class="col-form-label"></label>
             </div>
             <div class="col-5">
-                <input asp-for="MenuItem.Price" class="form-control" />
+                <input asp-for="MenuItem.Price" type="number" class="form-control" id="PriceID"/>
             </div>
             <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
         </div>
