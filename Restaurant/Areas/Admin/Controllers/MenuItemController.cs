@@ -30,8 +30,9 @@ namespace Restaurant.Areas.Admin.Controllers
             MenuItemVM = new MenuItemViewModel()
             {
                 Category = _db.Category,
-                MenuItem = new Models.MenuItem()
+                MenuItem = new Models.MenuItem(),
             };
+            Convert.ToDouble(MenuItemVM.MenuItem.Price);
         }
 
         public async Task<IActionResult> Index()
