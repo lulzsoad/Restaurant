@@ -15,7 +15,6 @@ namespace Restaurant.Controllers
     [Area("Customer")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _db;
 
         public HomeController(ApplicationDbContext db)
