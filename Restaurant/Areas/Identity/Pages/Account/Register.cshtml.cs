@@ -60,6 +60,26 @@ namespace Restaurant.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name="Imię")]
+            public string Name { get; set; }
+
+            [Required]
+            [Display(Name="Nazwisko")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Ulica i nr")]
+            public string StreetAddress { get; set; }
+
+            [Display(Name = "Numer Telefonu")]
+            public string PhoneNumber { get; set; }
+
+            [Display(Name = "Miasto")]
+            public string City { get; set; }
+
+            [Display(Name = "Kod Pocztowy")]
+            public string PostalCode { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
