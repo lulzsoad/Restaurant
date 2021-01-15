@@ -30,9 +30,8 @@ namespace Restaurant.Areas.Admin.Controllers
             MenuItemVM = new MenuItemViewModel()
             {
                 Category = _db.Category,
-                MenuItem = new Models.MenuItem(),
+                MenuItem = new Models.MenuItem()
             };
-            Convert.ToDouble(MenuItemVM.MenuItem.Price);
         }
 
         public async Task<IActionResult> Index()
@@ -54,56 +53,54 @@ namespace Restaurant.Areas.Admin.Controllers
         {
             MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
-            if(ModelState.IsValid)
-            {
-                _db.MenuItem.Add(MenuItemVM.MenuItem);
-                await _db.SaveChangesAsync();
-
-                // IMAGE SAVING SECTION
-
-                string webRootPath = _hostingEnvironment.WebRootPath;
-                var files = HttpContext.Request.Form.Files;
-
-                var menuItemFromDb = await _db.MenuItem.FindAsync(MenuItemVM.MenuItem.Id);
-
-                if(files.Count > 0)
-                {
-                    // FILE HAS BEEN UPLOADED
-
-                    var uploads = Path.Combine(webRootPath, "images");
-                    var extension = Path.GetExtension(files[0].FileName);
-
-                    // SETS FILE'S NAME BY ID OF MENUITEM WITH ACTUAL EXTENSION
-                    using (var fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension), FileMode.Create))
-                    {
-                        files[0].CopyTo(fileStream);
-                    }
-
-                    menuItemFromDb.Image = $@"\images\{MenuItemVM.MenuItem.Id + extension}";
-                }
-                else
-                {
-                    // NO FILE WAS UPLOADED, SO USE DEFAULT
-
-                    var uploads = Path.Combine(webRootPath, $@"images\{StaticDetail.NoImage}");
-                    System.IO.File.Copy(uploads, $@"{webRootPath}\images\{MenuItemVM.MenuItem.Id}.jpg");
-                    menuItemFromDb.Image = $@"\images\{MenuItemVM.MenuItem.Id}.jpg";
-                }
-
-                await _db.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return View(MenuItemVM);
             }
+
+            _db.MenuItem.Add(MenuItemVM.MenuItem);
+            await _db.SaveChangesAsync();
+
+            // IMAGE SAVING SECTION
+
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+
+            var menuItemFromDb = await _db.MenuItem.FindAsync(MenuItemVM.MenuItem.Id);
+
+            if (files.Count > 0)
+            {
+                // FILE HAS BEEN UPLOADED
+
+                var uploads = Path.Combine(webRootPath, "images");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                // SETS FILE'S NAME BY ID OF MENUITEM WITH ACTUAL EXTENSION
+                using (var fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(fileStream);
+                }
+
+                menuItemFromDb.Image = $@"\images\{MenuItemVM.MenuItem.Id + extension}";
+            }
+            else
+            {
+                // NO FILE WAS UPLOADED, SO USE DEFAULT
+
+                var uploads = Path.Combine(webRootPath, $@"images\{StaticDetail.NoImage}");
+                System.IO.File.Copy(uploads, $@"{webRootPath}\images\{MenuItemVM.MenuItem.Id}.jpg");
+                menuItemFromDb.Image = $@"\images\{MenuItemVM.MenuItem.Id}.jpg";
+            }
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // (GET - EDIT)
         public async Task<IActionResult> Edit(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -111,7 +108,7 @@ namespace Restaurant.Areas.Admin.Controllers
             MenuItemVM.MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
             MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
 
-            if(MenuItemVM.MenuItem == null)
+            if (MenuItemVM.MenuItem == null)
             {
                 return NotFound();
             }
@@ -149,7 +146,7 @@ namespace Restaurant.Areas.Admin.Controllers
 
                     // DELETING ORIGINAL FILE
 
-                    if(menuItemFromDb.Image == null)
+                    if (menuItemFromDb.Image == null)
                     {
                         using (var fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension_new), FileMode.Create))
                         {
@@ -164,7 +161,7 @@ namespace Restaurant.Areas.Admin.Controllers
                             System.IO.File.Delete(imagePath);
                         }
                     }
-                    
+
 
                     // UPLOADS NEW FILE
                     using (var fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension_new), FileMode.Create))
