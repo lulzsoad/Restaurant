@@ -30,7 +30,7 @@ namespace Restaurant.Areas.Admin.Controllers
             MenuItemVM = new MenuItemViewModel()
             {
                 Category = _db.Category,
-                MenuItem = new Models.MenuItem()
+                MenuItem = new Models.MenuItem() 
             };
         }
 
@@ -52,6 +52,11 @@ namespace Restaurant.Areas.Admin.Controllers
         public async Task<IActionResult> CreatePOST()
         {
             MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+
+            if(MenuItemVM.MenuItem.Price == 0)
+            {
+                MenuItemVM.MenuItem.Price = 1.99;
+            }
 
             if (!ModelState.IsValid)
             {
