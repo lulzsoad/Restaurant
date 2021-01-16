@@ -12,6 +12,8 @@ using Restaurant.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading;
+using System.Globalization;
 
 namespace Restaurant
 {
@@ -20,6 +22,12 @@ namespace Restaurant
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            var cultureInfo = new CultureInfo("en-US");
+            cultureInfo.NumberFormat.CurrencySymbol = "z³";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
 
         public IConfiguration Configuration { get; }
@@ -58,6 +66,8 @@ namespace Restaurant
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            
 
             app.UseEndpoints(endpoints =>
             {
