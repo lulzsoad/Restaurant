@@ -8,5 +8,9 @@ namespace Restaurant.Utility
     public static class StaticDetail
     {
         public const string NoImage = "no_image.jpg";
+        public const string ManagerUser = "Menadżer";
+        public const string KitchenUser = "Kuchnia";
+        public const string FrontDeskUser = "Obsługa";
+        public const string CustomerEndUser = "Klient";
     }
 }
