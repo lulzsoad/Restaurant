@@ -29,5 +29,47 @@ namespace Restaurant.Areas.Admin.Controllers
 
             return View(await _db.ApplicationUser.Where(u=>u.Id != claim.Value).ToListAsync()); //GETS EVERY USER EXCEPT OF LOGGED IN ONE
         }
+
+        public async Task<IActionResult> Lock(string id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var applicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(m => m.Id == id);
+
+            if(applicationUser == null)
+            {
+                return NotFound();
+            }
+
+            applicationUser.LockoutEnd = DateTime.Now.AddYears(1000);
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Unlock(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var applicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (applicationUser == null)
+            {
+                return NotFound();
+            }
+
+            applicationUser.LockoutEnd = DateTime.Now;
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

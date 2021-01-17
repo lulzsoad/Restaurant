@@ -31,13 +31,13 @@ namespace Restaurant.Areas.Identity.Pages.Account
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-          // IEmailSender emailSender,
+            // IEmailSender emailSender,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-          //  _emailSender = emailSender;
+            //  _emailSender = emailSender;
             _roleManager = roleManager;
         }
 
@@ -67,11 +67,11 @@ namespace Restaurant.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [Display(Name="Imię")]
+            [Display(Name = "Imię")]
             public string Name { get; set; }
 
             [Required]
-            [Display(Name="Nazwisko")]
+            [Display(Name = "Nazwisko")]
             public string LastName { get; set; }
 
             [Display(Name = "Ulica i nr Domu")]
@@ -95,27 +95,29 @@ namespace Restaurant.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            string role = Request.Form["rdUserRole"].ToString();
+
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser 
-                { 
-                    UserName = Input.Email, 
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,
                     LastName = Input.LastName,
                     City = Input.City,
                     StreetAddress = Input.StreetAddress,
                     PostalCode = Input.PostalCode,
-                    PhoneNumber = Input.PhoneNumber
+                    PhoneNumber = Input.PhoneNumber,
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    if(!await _roleManager.RoleExistsAsync(StaticDetail.CustomerEndUser))
+                    if (!await _roleManager.RoleExistsAsync(StaticDetail.CustomerEndUser))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(StaticDetail.CustomerEndUser));
                     }
@@ -132,7 +134,32 @@ namespace Restaurant.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(StaticDetail.KitchenUser));
                     }
 
-                    await _userManager.AddToRoleAsync(user, StaticDetail.ManagerUser);
+                    if (role == StaticDetail.KitchenUser)
+                    {
+                        await _userManager.AddToRoleAsync(user, StaticDetail.KitchenUser);
+                    }
+                    else
+                    {
+                        if (role == StaticDetail.FrontDeskUser)
+                        {
+                            await _userManager.AddToRoleAsync(user, StaticDetail.FrontDeskUser);
+                        }
+                        else
+                        {
+                            if (role == StaticDetail.ManagerUser)
+                            {
+                                await _userManager.AddToRoleAsync(user, StaticDetail.ManagerUser);
+                            }
+                            else
+                            {
+                                await _userManager.AddToRoleAsync(user, StaticDetail.CustomerEndUser);
+                                await _signInManager.SignInAsync(user, isPersistent: false);
+                                return LocalRedirect(returnUrl);
+                            }
+                        }
+                    }
+
+                    return RedirectToAction("Index", "User", new { area = "Admin" });
 
                     //_logger.LogInformation("User created a new account with password.");
 
@@ -153,8 +180,8 @@ namespace Restaurant.Areas.Identity.Pages.Account
                     //}
                     //else
                     //{
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                   
+                    
                     //}
                 }
                 foreach (var error in result.Errors)

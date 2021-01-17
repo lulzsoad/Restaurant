@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<ApplicationUser>
-
+@using Restaurant.Extensions
 @{
     ViewData["Tilte"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,7 +24,7 @@
             <table class="table table-striped border">
                 <tr class="table-secondary">
                     <th>
-                        @Html.DisplayNameFor(m => m.Name)
+                        @Html.DisplayNameFor(m => m.FullName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(m => m.Email)
@@ -32,27 +32,40 @@
                     <th>
                         @Html.DisplayNameFor(m => m.PhoneNumber)
                     </th>
-                    
-                    <th></th>
+                    <th>
+
+                    </th>
                     <th></th>
                 </tr>
                 @foreach (var item in Model)
                 {
-            <tr>
-                <td>
-                    @Html.DisplayFor(m => $"{item.Name} {item.LastName}")
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.PhoneNumber)
-                </td>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => item.Name) @Html.DisplayFor(m => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.PhoneNumber)
+                        </td>
 
-                <td>
-                    <a class="btn btn-success text-white" asp-action="Lock" asp-route-id="@item.Id"><i class="fas fa-lock-open"></i></a>
-                </td>
-            </tr>
+                        <td>
+                            @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                            {
+                                <a class="btn btn-success text-white" asp-action="Lock" asp-route-id="@item.Id">
+                                    <i class="fas fa-lock-open"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger text-white" asp-action="Unlock" asp-route-id="@item.Id">
+                                    <i class="fas fa-lock-open"></i>
+                                </a>
+                            }
+
+                        </td>
+                    </tr>
                 }
             </table>
         }

@@ -1,4 +1,5 @@
 ﻿@page
+@using Restaurant.Utility
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -98,9 +99,24 @@
             </div>
             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
         </div>
+
+        @if (User.IsInRole(StaticDetail.ManagerUser))
+        {
+            <div class="form-group row">
+                <div class="col-2">
+                </div>
+                <div class="col-5">
+                    <input type="radio" name="rdUserRole" value="@StaticDetail.KitchenUser" checked /> @StaticDetail.KitchenUser
+                    <input type="radio" name="rdUserRole" value="@StaticDetail.FrontDeskUser" checked /> @StaticDetail.FrontDeskUser
+                    <input type="radio" name="rdUserRole" value="@StaticDetail.ManagerUser" checked /> @StaticDetail.ManagerUser
+                </div>
+            </div>
+
+        }
+
         <div class="form-group row">
             <div class="col-5 offset-2">
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary form-control">Register</button>
             </div>
         </div>
     </form>
