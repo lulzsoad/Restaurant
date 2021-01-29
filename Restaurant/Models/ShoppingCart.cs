@@ -24,7 +24,7 @@ namespace Restaurant.Models
         public int MenuItemId { get; set; }
         [NotMapped]             // It means -Doesn't add field to database
         [ForeignKey("MenuItemId")]
-        public virtual ApplicationUser MenuItem { get; set; }
+        public virtual MenuItem MenuItem { get; set; }
 
         [Display(Name = "Ilość")]
         [Range(1, int.MaxValue, ErrorMessage = "Proszę wprowadzić liczbę większą niż {1}")]
