@@ -12,5 +12,6 @@ namespace Restaurant.Utility
         public const string KitchenUser = "Kuchnia";
         public const string FrontDeskUser = "Obsługa";
         public const string CustomerEndUser = "Klient";
+        public const string ssShoppingCartCount = "ssCartCount";
     }
 }

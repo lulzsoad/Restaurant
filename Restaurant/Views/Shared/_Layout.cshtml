@@ -1,4 +1,9 @@
 ﻿@using Restaurant.Utility
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +19,9 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/potato.png" width="50px" />
-                    <label style="cursor:pointer;">Restaurant</label>
-                    <img src="~/images/french-fries.png" width="50px" />
+                    <img src="~/images/potato.png" width="30px" /> &nbsp;
+                    <label style="cursor:pointer;">Restaurant</label> &nbsp;
+                    <img src="~/images/french-fries.png" width="30px" />
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +32,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.IsInRole(StaticDetail.ManagerUser))
                         {
-                            <li class="nav-item dropdown" text-white-50>
+                            <li class="nav-item dropdown text-white-50">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Zarządzanie zawartością
                                 </a>
@@ -41,11 +46,26 @@
                             </li>
                         }
                         &nbsp;
-                        <li style="color:white;">
-                            <a href="#">
-                                <i class="fas fa-shopping-cart"></i> &nbsp; (0)
-                            </a>
-                        </li>
+
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetail.ssShoppingCartCount) != null)
+                        {
+                            <li style="color:white;">
+                                <a class="nav-link" href="#">
+                                    @{
+                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetail.ssShoppingCartCount);
+                                    }
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li style="color:white;">
+                                <a class="nav-link" href="#">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
