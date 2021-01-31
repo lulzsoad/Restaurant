@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Restaurant.Data;
 using Restaurant.Models;
 using Restaurant.Models.ViewModels;
+using Restaurant.Utility;
 
 namespace Restaurant.Controllers
 {
@@ -33,6 +34,15 @@ namespace Restaurant.Controllers
                 Category = await _db.Category.ToListAsync(),
                 Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if(claim != null)
+            {
+                var cnt = _db.ShoppingCart.Where(u => u.ApplicationUserId == claim.Value).ToList().Count;
+                HttpContext.Session.SetInt32(StaticDetail.ssShoppingCartCount, cnt);
+            }
 
             return View(IndexVM);
         } 
@@ -89,7 +99,7 @@ namespace Restaurant.Controllers
 
                 var count = _db.ShoppingCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId)
                     .ToList().Count();
-                HttpContext.Session.SetInt32("ssCartCount", count);
+                HttpContext.Session.SetInt32(StaticDetail.ssShoppingCartCount, count);
 
                 return RedirectToAction("Index");
             }
