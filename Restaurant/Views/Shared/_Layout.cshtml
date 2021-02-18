@@ -50,11 +50,11 @@
                         @if (HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetail.ssShoppingCartCount) != null)
                         {
                             <li style="color:white;">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
                                     @{
                                         var count = HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetail.ssShoppingCartCount);
                                     }
-                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
+                                    <i class="fas fa-shopping-basket"></i> &nbsp; (@count)
                                 </a>
                             </li>
                         }
