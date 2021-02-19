@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+
 
 <form method="post">
     @if (Model.ListCart.Count > 0)
@@ -41,18 +41,18 @@
                                     </div>
                                     <div class="col-6 col-sm-4 col-lg-6">
                                         <div class="float-right mx-1">
-                                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-route-cartId="@item.Id">
+                                            <button type="submit" class="btn btn-primary" asp-action="Plus" asp-route-cartId="@item.Id">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
                                         <div class="float-right mx-1">
-                                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-route-cartId="@item.Id">
+                                            <button type="submit" class="btn btn-danger" asp-action="Minus" asp-route-cartId="@item.Id">
                                                 <i class="fas fa-minus"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="col-2 col-sm-4 col-lg-2 text-right">
-                                        <button type="submit" class="btn btn-outline-danger" asp-action="remove" asp-route-cartId="@item.Id">
+                                        <button type="submit" class="btn btn-outline-danger" asp-action="Remove" asp-route-cartId="@item.Id">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </div>
@@ -95,6 +95,8 @@
     }
     else
     {
+        <br />
+        <br />
         <div class="backgrounWhiteBorder">Koszyk jest pusty...</div>
     }
 </form>
