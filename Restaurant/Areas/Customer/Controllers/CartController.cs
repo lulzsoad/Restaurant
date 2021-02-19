@@ -78,5 +78,13 @@ namespace Restaurant.Areas.Customer.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult RemoveCoupon()
+        {
+
+            HttpContext.Session.SetString(StaticDetail.ssCouponCode, string.Empty);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

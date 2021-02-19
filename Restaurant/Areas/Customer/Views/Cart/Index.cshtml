@@ -69,8 +69,6 @@
                                     </div>
                                     <div class="col-5" style="margin-top:2px;">
                                         <button type="submit" class="btn btn-sm form-control btn-outline-success" id="btnCoupon" asp-action="AddCoupon">Zatwierdź</button>
-                                    </div>
-                                    <div class="col-5" style="margin-top:2px;">
                                         <button type="submit" class="btn btn-sm form-control btn-outline-danger" style="display:none;" id="btnRemoveCoupon" asp-action="RemoveCoupon">Usuń</button>
                                     </div>
                                 </div>
@@ -100,3 +98,20 @@
         <div class="backgrounWhiteBorder">Koszyk jest pusty...</div>
     }
 </form>
+
+@section Scripts{ 
+    <script>
+        $(function () {
+            let couponCode = document.querySelector('#txtCouponCode').value;
+
+            if (couponCode.length > 0) {
+                document.querySelector('#btnCoupon').style.display = 'none';
+                document.querySelector('#btnRemoveCoupon').style.display = '';
+            }
+            else {
+                document.querySelector('#btnCoupon').style.display = '';
+                document.querySelector('#btnRemoveCoupon').style.display = 'none';
+            }
+        });
+    </script>
+}
