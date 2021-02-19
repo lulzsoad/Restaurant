@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ namespace Restaurant.Utility
         public const string FrontDeskUser = "Obsługa";
         public const string CustomerEndUser = "Klient";
         public const string ssShoppingCartCount = "ssCartCount";
+
+		public const string ssCouponCode = "ssCouponCode";
 
 
 		public static string ConvertToRawHtml(string source)
@@ -42,5 +45,35 @@ namespace Restaurant.Utility
 			}
 			return new string(array, 0, arrayIndex);
 		}
+
+		public static double DiscountedPrice(Coupon couponFromDb, double originalOrderTotal)
+        {
+			if(couponFromDb == null)
+            {
+				return originalOrderTotal;
+            }
+			else
+            {
+				if(couponFromDb.MinimumAmount > originalOrderTotal)
+                {
+					return originalOrderTotal;
+                }
+				else
+                {
+					// EVERYTHING IS VALID
+					if(Convert.ToInt32(couponFromDb.CouponType) == (int)Coupon.ECouponType.Wartościowy)
+                    {
+						return Math.Round(originalOrderTotal - couponFromDb.Discount, 2);
+                    }
+					
+					if(Convert.ToInt32(couponFromDb.CouponType) == (int)Coupon.ECouponType.Procentowy)
+                    {
+							return Math.Round(originalOrderTotal - (originalOrderTotal * couponFromDb.Discount / 100), 2);
+					}
+                    
+                }
+            }
+			return originalOrderTotal;
+        }
 	}
 }

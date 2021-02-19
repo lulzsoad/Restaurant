@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Data;
@@ -56,7 +57,26 @@ namespace Restaurant.Areas.Customer.Controllers
 
             DetailCartVM.OrderHeader.OrderTotalOriginal = DetailCartVM.OrderHeader.OrderTotal;
 
+            if(HttpContext.Session.GetString(StaticDetail.ssCouponCode) != null)
+            {
+                DetailCartVM.OrderHeader.CouponCode = HttpContext.Session.GetString(StaticDetail.ssCouponCode);
+                var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == DetailCartVM.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
+                DetailCartVM.OrderHeader.OrderTotal = StaticDetail.DiscountedPrice(couponFromDb, DetailCartVM.OrderHeader.OrderTotalOriginal);
+            }
+
             return View(DetailCartVM);
+        }
+
+        public IActionResult AddCoupon()
+        {
+            if(DetailCartVM.OrderHeader.CouponCode == null)
+            {
+                DetailCartVM.OrderHeader.CouponCode = "";
+            }
+
+            HttpContext.Session.SetString(StaticDetail.ssCouponCode, DetailCartVM.OrderHeader.CouponCode);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
