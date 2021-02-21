@@ -38,7 +38,7 @@
                                             <label>Imię: </label>
                                         </div>
                                         <div class="col-9">
-                                            <input asp-for="@Model.OrderHeader.PickUpName" type="text" class="form-control" />
+                                            <input asp-for="@Model.OrderHeader.PickUpName" type="text" id="txtName" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="row" my-1>
@@ -46,7 +46,7 @@
                                             <label>Kontakt: </label>
                                         </div>
                                         <div class="col-9">
-                                            <input asp-for="@Model.OrderHeader.PhoneNumber" type="text" class="form-control" />
+                                            <input asp-for="@Model.OrderHeader.PhoneNumber" type="text" id="txtPhone" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="row" my-1>
@@ -102,7 +102,7 @@
                                                     <h6 class="my-0">Kod promocyjny: </h6>
                                                     <small class="text-success">@Model.OrderHeader.CouponCode</small>
                                                 </div>
-                                                <span class="text-success">-@(Convert.ToDecimal(total - Model.OrderHeader.OrderTotal)) zł</span>
+                                                <span class="text-success"><strong>-@(Convert.ToDecimal(total - Model.OrderHeader.OrderTotal)) zł</strong></span>
                                             </li>
                                         }
 
@@ -118,8 +118,13 @@
                         </div>
                     </div>
                     <div class="card-footer">
-
-
+                        <div class="row">
+                            <div class="col-12 col-md-4 offset-md-8">
+                                <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Złóż Zamówienie" class="btn btn-success form-control">
+                                    Złóż Zamówienie
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -187,6 +192,37 @@
             setPickUpTime();
         });
 
+        function validateInput() {
+            var time = document.querySelector('#timePicker').value;
+            var date = document.querySelector('#datePicker').value;
+            var name = document.querySelector('#txtName').value;
+            var phone = document.querySelector('#txtPhone').value;
 
+            if (time.toString() == "") {
+                alert("Proszę wybrać godzinę dostawy.");
+                return false;
+            }
+            else {
+                if (date.toString() == "") {
+                    alert("Proszę wybrać datę dostawy.");
+                    return false;
+                }
+                else {
+                    if (name.toString() == "") {
+                        alert("Proszę uzupełnić pole z imieniem.");
+                        return false;
+                    }
+                    else {
+                        if (phone.toString() == "") {
+                            alert("Proszę uzupełnić polę z numerem kontaktowym");
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
     </script>
 }
