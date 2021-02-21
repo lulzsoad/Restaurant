@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Data;
+using Restaurant.Models;
 using Restaurant.Models.ViewModels;
 using Restaurant.Utility;
 
@@ -126,6 +127,47 @@ namespace Restaurant.Areas.Customer.Controllers
             HttpContext.Session.SetInt32(StaticDetail.ssShoppingCartCount, cnt);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Summary()
+        {
+            DetailCartVM = new OrderDetailsCartViewModel()
+            {
+                OrderHeader = new Models.OrderHeader()
+            };
+
+            DetailCartVM.OrderHeader.OrderTotal = 0;
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ApplicationUser appUser = await _db.ApplicationUser.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
+
+            var cart = _db.ShoppingCart.Where(c => c.ApplicationUserId == claim.Value);
+
+            if (cart != null)
+            {
+                DetailCartVM.ListCart = cart.ToList();
+            }
+
+            foreach (var list in DetailCartVM.ListCart)
+            {
+                list.MenuItem = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == list.MenuItemId);
+                DetailCartVM.OrderHeader.OrderTotal += (list.MenuItem.Price * list.Count);
+            }
+
+            DetailCartVM.OrderHeader.OrderTotalOriginal = DetailCartVM.OrderHeader.OrderTotal;
+            DetailCartVM.OrderHeader.PickUpName = appUser.Name;
+            DetailCartVM.OrderHeader.PhoneNumber = appUser.PhoneNumber;
+            DetailCartVM.OrderHeader.PickUpTime = DateTime.Now;
+
+            if (HttpContext.Session.GetString(StaticDetail.ssCouponCode) != null)
+            {
+                DetailCartVM.OrderHeader.CouponCode = HttpContext.Session.GetString(StaticDetail.ssCouponCode);
+                var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == DetailCartVM.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
+                DetailCartVM.OrderHeader.OrderTotal = StaticDetail.DiscountedPrice(couponFromDb, DetailCartVM.OrderHeader.OrderTotalOriginal);
+            }
+
+            return View(DetailCartVM);
         }
     }
 }
