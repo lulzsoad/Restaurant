@@ -43,7 +43,7 @@ namespace Restaurant.Models
         public string PaymentStatus { get; set; }
         public string Comments { get; set; }
 
-        [Display(Name = "Odbierać zamówienie będzie")]
+        [Display(Name = "Imię")]
         public string PickUpName { get; set; }
 
         [Display(Name = "Numer telefonu")]

@@ -30,7 +30,7 @@ namespace Restaurant.Areas.Customer.Controllers
         {
             DetailCartVM = new OrderDetailsCartViewModel()
             {
-                OrderHeader = new Models.OrderHeader()
+                OrderHeader = new OrderHeader()
             };
 
             DetailCartVM.OrderHeader.OrderTotal = 0;
@@ -133,7 +133,7 @@ namespace Restaurant.Areas.Customer.Controllers
         {
             DetailCartVM = new OrderDetailsCartViewModel()
             {
-                OrderHeader = new Models.OrderHeader()
+                OrderHeader = new OrderHeader()
             };
 
             DetailCartVM.OrderHeader.OrderTotal = 0;
