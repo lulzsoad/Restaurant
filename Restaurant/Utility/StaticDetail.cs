@@ -13,9 +13,19 @@ namespace Restaurant.Utility
         public const string KitchenUser = "Kuchnia";
         public const string FrontDeskUser = "Obsługa";
         public const string CustomerEndUser = "Klient";
-        public const string ssShoppingCartCount = "ssCartCount";
 
+        public const string ssShoppingCartCount = "ssCartCount";
 		public const string ssCouponCode = "ssCouponCode";
+
+		public const string StatusSubmitted = "Wysłane";
+		public const string StatusInProccess = "Jest przygotowywane";
+		public const string StatusReady = "Gotowe do odbioru";
+		public const string StatusCompleted = "Zakończone";
+		public const string StatusCancelled = "Anulowane";
+
+		public const string PaymentStatusPending = "Oczekuje";
+		public const string PaymentStatusApproved = "Zatwierdzona";
+		public const string PaymentStatusRejected = "Odrzucona";
 
 
 		public static string ConvertToRawHtml(string source)
