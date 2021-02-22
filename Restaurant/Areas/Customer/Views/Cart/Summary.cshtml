@@ -1,4 +1,7 @@
 ﻿@model Restaurant.Models.ViewModels.OrderDetailsCartViewModel
+@using Microsoft.Extensions.Options
+
+@inject IOptions<Restaurant.Utility.StripeSettings> Stripe
 @{
     ViewData["Title"] = "Summary";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -120,6 +123,14 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-12 col-md-4 offset-md-8">
+                                @{
+                                    var OrderTotalForStripe = Model.OrderHeader.OrderTotal * 100;
+                                }
+                                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"data-key="@Stripe.Value.PublishableKey"  data-amount="@OrderTotalForStripe" data-currency="pln" data-description="Zapłać" data data-name="Restauracja" data-label="Złóż zamówienie" data-description="Szybko i Smacznie!" data-locale="auto" data-allow-remember-me="false" data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+                                </script>
+                                <script>
+                                    document.querySelector('.stripe-button-el').style.display = 'none';
+                                </script>
                                 <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Złóż Zamówienie" class="btn btn-success form-control">
                                     Złóż Zamówienie
                                 </button>

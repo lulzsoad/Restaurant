@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Globalization;
+using Restaurant.Utility;
+using Stripe;
 
 namespace Restaurant
 {
@@ -54,6 +56,8 @@ namespace Restaurant
                 options.Cookie.IsEssential = true;
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +78,8 @@ namespace Restaurant
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
 
             app.UseAuthentication();
             app.UseAuthorization();

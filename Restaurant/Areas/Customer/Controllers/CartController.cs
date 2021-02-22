@@ -10,6 +10,7 @@ using Restaurant.Data;
 using Restaurant.Models;
 using Restaurant.Models.ViewModels;
 using Restaurant.Utility;
+using Stripe;
 
 namespace Restaurant.Areas.Customer.Controllers
 {
@@ -173,7 +174,7 @@ namespace Restaurant.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPOST()
+        public async Task<IActionResult> SummaryPOST(string stripeToken)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -227,7 +228,39 @@ namespace Restaurant.Areas.Customer.Controllers
             HttpContext.Session.SetInt32(StaticDetail.ssShoppingCartCount, 0);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Confirm", "Order", new { id = DetailCartVM.OrderHeader.Id });
+            var options = new ChargeCreateOptions
+            {
+                Amount = Convert.ToInt32(DetailCartVM.OrderHeader.OrderTotal * 100),
+                Currency = "pln",
+                Description = "ID Zamówienia : " + DetailCartVM.OrderHeader.Id,
+                SourceId = stripeToken
+            };
+
+            var service = new ChargeService();
+            Charge charge = service.Create(options);
+
+            if(charge.BalanceTransactionId == null)
+            {
+                DetailCartVM.OrderHeader.PaymentStatus = StaticDetail.PaymentStatusRejected;
+            }
+            else
+            {
+                DetailCartVM.OrderHeader.TransactionId = charge.BalanceTransactionId;
+            }
+
+            if(charge.Status.ToLower() == "succeeded")
+            {
+                DetailCartVM.OrderHeader.PaymentStatus = StaticDetail.PaymentStatusApproved;
+                DetailCartVM.OrderHeader.Status = StaticDetail.StatusSubmitted;
+            }
+            else
+            {
+                DetailCartVM.OrderHeader.PaymentStatus = StaticDetail.PaymentStatusRejected;
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Confirm", "Order", new { id = DetailCartVM.OrderHeader.Id });
         }
     }
 }
