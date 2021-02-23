@@ -17,7 +17,7 @@ namespace Restaurant.Utility
         public const string ssShoppingCartCount = "ssCartCount";
 		public const string ssCouponCode = "ssCouponCode";
 
-		public const string StatusSubmitted = "Wysłane";
+		public const string StatusSubmitted = "Zatwierdzone";
 		public const string StatusInProccess = "Jest przygotowywane";
 		public const string StatusReady = "Gotowe do odbioru";
 		public const string StatusCompleted = "Zakończone";

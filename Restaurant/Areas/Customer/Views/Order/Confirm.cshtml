@@ -1,0 +1,40 @@
+﻿@model Restaurant.Models.ViewModels.OrderDetailsViewModel
+@{
+    ViewData["Title"] = "Confirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+
+<div class="backgrounWhite">
+    <div class="row px-3">
+        <div class="col-8">
+            <h2 class="text-info">
+                Zamówienie Zaakceptowane
+            </h2>
+        </div>
+        <div class="col-4 text-right">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-success form-control">Nowe Zamówienie</a>
+        </div>
+
+    </div>
+
+    @if (Model.OrderHeader != null)
+    {
+        <div style="color: darkgreen" class="p-3">
+            Twoje zamówienie zostało zaakceptowane! Szczegóły zamówienia poniżej.
+            <br />
+            Jeżeli masz jakieś pytania skontaktuj się z nami!
+        </div>
+
+        <partial name="_IndividualOrderDetails" model="Model" />
+    }
+    else
+    {
+        <div class="text-danger">
+            Wystąpił błąd. Spróbuj ponownie<br /><i>Model.OrderHeader is null</i>
+        </div>
+    }
+
+</div>
+

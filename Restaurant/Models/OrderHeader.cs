@@ -18,6 +18,7 @@ namespace Restaurant.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         [Required]
+        [Display(Name = "Data Zamówienia")]
         public DateTime OrderDate { get; set; }
 
         [Required]
@@ -41,6 +42,8 @@ namespace Restaurant.Models
         public double CouponCodeDiscount { get; set; }
         public string Status { get; set; }
         public string PaymentStatus { get; set; }
+
+        [Display(Name = "Uwagi")]
         public string Comments { get; set; }
 
         [Display(Name = "Imię")]

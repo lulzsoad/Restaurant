@@ -259,8 +259,9 @@ namespace Restaurant.Areas.Customer.Controllers
             }
 
             await _db.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
-            //return RedirectToAction("Confirm", "Order", new { id = DetailCartVM.OrderHeader.Id });
+
+            //return RedirectToAction("Index", "Home");
+            return RedirectToAction("Confirm", "Order", new { id = DetailCartVM.OrderHeader.Id });
         }
     }
 }
