@@ -38,8 +38,9 @@ namespace Restaurant.Models
         public virtual SubCategory SubCategory { get; set; }
 
         [Display(Name = "Cena")]
-        [Range(1, int.MaxValue, ErrorMessage = " Cena powinna być wyższa niż ${1}")]
-        public double Price { get; set; }
+        [DataType(DataType.Currency)]
+        //[Range(1, int.MaxValue, ErrorMessage = " Cena powinna być wyższa niż {1} zł")]
+        public decimal Price { get; set; }
 
 
     }

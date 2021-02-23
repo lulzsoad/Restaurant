@@ -22,12 +22,12 @@ namespace Restaurant.Models
         public DateTime OrderDate { get; set; }
 
         [Required]
-        public double OrderTotalOriginal { get; set; }
+        public decimal OrderTotalOriginal { get; set; }
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Display(Name = "Suma")]
-        public double OrderTotal { get; set; }
+        public decimal OrderTotal { get; set; }
 
         [Required]
         [Display(Name = "Godzina odbioru")]
@@ -40,7 +40,7 @@ namespace Restaurant.Models
 
         [Display(Name = "Kod promocyjny")]
         public string CouponCode { get; set; }
-        public double CouponCodeDiscount { get; set; }
+        public decimal CouponCodeDiscount { get; set; }
         public string Status { get; set; }
         public string PaymentStatus { get; set; }
 

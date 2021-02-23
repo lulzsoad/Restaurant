@@ -22,11 +22,11 @@ namespace Restaurant.Models
 
         [Display(Name = "Rabat")]
         [Required]
-        public double Discount { get; set; }
+        public decimal Discount { get; set; }
 
         [Display(Name = "Minimalna Stawka")]
         [Required]
-        public double MinimumAmount { get; set; }
+        public decimal MinimumAmount { get; set; }
 
         [Display(Name = "Obrazek")]
         public byte[] Picture { get; set; }

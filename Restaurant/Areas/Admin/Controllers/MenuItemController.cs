@@ -55,11 +55,6 @@ namespace Restaurant.Areas.Admin.Controllers
         {
             MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
-            if(MenuItemVM.MenuItem.Price == 0)
-            {
-                MenuItemVM.MenuItem.Price = 1.99;
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(MenuItemVM);

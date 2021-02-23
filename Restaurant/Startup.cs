@@ -16,6 +16,7 @@ using System.Threading;
 using System.Globalization;
 using Restaurant.Utility;
 using Stripe;
+using Microsoft.AspNetCore.Localization;
 
 namespace Restaurant
 {
@@ -25,7 +26,7 @@ namespace Restaurant
         {
             Configuration = configuration;
 
-            var cultureInfo = new CultureInfo("en-US");
+            var cultureInfo = new CultureInfo("pl-PL");
             cultureInfo.NumberFormat.CurrencySymbol = "z³";
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
@@ -84,7 +85,16 @@ namespace Restaurant
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
-            
+
+            var defaultCulture = new CultureInfo("pl-PL");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(defaultCulture),
+                SupportedCultures = new List<CultureInfo> { defaultCulture },
+                SupportedUICultures = new List<CultureInfo> { defaultCulture }
+            };
+            app.UseRequestLocalization(localizationOptions);
+
 
             app.UseEndpoints(endpoints =>
             {

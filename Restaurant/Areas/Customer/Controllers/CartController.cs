@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -263,5 +264,7 @@ namespace Restaurant.Areas.Customer.Controllers
             //return RedirectToAction("Index", "Home");
             return RedirectToAction("Confirm", "Order", new { id = DetailCartVM.OrderHeader.Id });
         }
+
+        
     }
 }

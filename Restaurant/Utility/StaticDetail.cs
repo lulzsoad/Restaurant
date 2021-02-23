@@ -56,7 +56,7 @@ namespace Restaurant.Utility
 			return new string(array, 0, arrayIndex);
 		}
 
-		public static double DiscountedPrice(Coupon couponFromDb, double originalOrderTotal)
+		public static decimal DiscountedPrice(Coupon couponFromDb, decimal originalOrderTotal)
         {
 			if(couponFromDb == null)
             {
