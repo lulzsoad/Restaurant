@@ -35,6 +35,7 @@ namespace Restaurant.Models
 
         [Required]
         [NotMapped]
+        [Display(Name = "Data odbioru")]
         public DateTime PickUpDate { get; set; }
 
         [Display(Name = "Kod promocyjny")]
